@@ -26,24 +26,29 @@ main() {
 		printf("%02X \t", IP);
 		switch (opcode) {
 		case 0x02:
-			AL = AL + AL;
+			opcode = code[IP++];
+			switch (opcode) {
+			case 0xC0:
+				AL = AL + AL;
+				break;
+			}
 			break;
 		case 0xB0:
-			AL = 1;
-			break;
-		case 0xC0:
-			//if (AL < (1 << sizeof(byte) * 8)) leftRotate(AL, 1);
-			//else rightRotate(AL, 1);
+			opcode = code[IP++];
+			switch (opcode) {
+			case 0x01:
+				AL = 1;
+				break;
+			}
 			break;
 		case 0xCD:
 			opcode = code[IP++];
 			if (opcode == 0x20) return 0;
-		//default:
-			//printf("%02X \n", opcode);
+			//default:
+				//printf("%02X \n", opcode);
 		}
 		printf("AL=%d \n", AL);
 	}
-
 
 /*
 	while (1) {
