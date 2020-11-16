@@ -5,10 +5,12 @@
 
 typedef unsigned char byte;
 typedef unsigned short word;
+typedef unsigned int dword;
 
 byte AL, AH, BL, BH, CL, CH, DL, DH;
 word AX, BX, CX, DX;
-word FLAGS, IP, ES, SS, DS, CS, SP, BP, DI, SI;
+word flags, IP, ES, SS, DS, CS, SP, BP, DI, SI;
+//int flags[8];
 
 byte code[MAXCODE];
 byte opcode;
@@ -21,16 +23,27 @@ main() {
 	fclose(f);
 
 	IP = 0;
+	flags = 0x00000000;
 	while (1) {
 		opcode = code[IP++];
+
 		//printf("%02X \t", IP);
 		switch (opcode) {
 		case 0x02:
-			//add reg8,reg8
+			//add re g8,reg8
 			opcode = code[IP++];
 			switch (opcode) {
 			case 0xC0:
 				//add al,al
+				if (AL > 0xFF - AL) {
+					//flags[6] = 1;
+					//flags ^= 1 << 6;
+					//Set ZF and CF to 1 if not already
+					flags = flags | (1 << 15);
+					//flags = flags | (1 << 5);
+					break;
+				}
+				AL += AL;
 				break;
 			case 0xC1:
 				//add al,cl
@@ -586,6 +599,7 @@ main() {
 			opcode = code[IP++];
 			if (opcode == 0x20) return 0;
 		}
-		printf("AL=%d \t AH=%d \n", AL, AH);
+		printf("AL=%d \t AH=%d \t CF=%d \n", AL, AH, flags);
+
 	}
 }
