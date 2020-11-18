@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Emulator.cpp" />
+    <ClCompile Include="Emulator.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Help.h" />
