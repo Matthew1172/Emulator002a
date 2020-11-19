@@ -139,11 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Emulator.c" />
+    <ClCompile Include="Emulator.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Help.h" />
-  </ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="Help.h" />
+	</ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
