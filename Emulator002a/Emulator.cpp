@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_DEPRECATE
 #define DEBUG true
+#define OS true //true if using microsoft visual studio, false if using g++
 #define MAXCODE 0x100000
 #include <iostream>
 
@@ -157,10 +158,27 @@ void cop(byte opcode) {
 	}
 }
 
-int main() {
+int main(int argc, char* argv[]) {
 	FILE* f;
-	f = fopen("C:\\csc210\\SAMPLE2.com", "rb");
-	if (!f) return -1;
+	if (OS) {
+		f = fopen("C:\\csc210\\SAMPLE2.COM", "rb");
+		if (!f) {
+			printf("fopen could not read this file in 'rb' mode");
+			return -1;
+		}
+	}
+	else {
+		if (argc < 2) {
+			printf("Compile like this: g++ Emulator.cpp\n");
+			printf("Pass the path to the .com file if in same directory like this: ./a.out SAMPLE2.com\n");
+			return -1;
+		}
+		f = fopen(argv[1], "rb");
+		if (!f) {
+			printf("fopen could not read this file in 'rb' mode");
+			return -1;
+		}
+	}
 	fread(code, 1, MAXCODE, f);
 	fclose(f);
 
@@ -294,7 +312,7 @@ int main() {
 			break;
 		case 0xcd:
 			opcode = code[IP++];
-			if (DEBUG) printf("\nRead byte 0xCD followed by terminator byte: %02X\nexiting . . .\n", opcode);
+			printf("\nRead byte 0xCD followed by terminator byte: %02X\nexiting . . .\n", opcode);
 			if (opcode == 0x20) return 0;
 		default:		
 /*
@@ -311,7 +329,7 @@ int main() {
 			cop(opcode);
 			break;
 		}
-		if (DEBUG) dumpRegisters();
+		dumpRegisters();
 	}
 	return 0;
 }
