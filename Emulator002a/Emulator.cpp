@@ -1,5 +1,22 @@
+/*
+*
+* Matthew Pecko
+* Prof. Vulis
+* 11/21/2020
+* CSc 210 limited x86 emulator
+* 
+* INFO:
+* set OS = false if using g++ to compile. 
+* Then run program as follows with .COM file in same directory as program: ./a.out sample.com
+* 
+* flags bit position 7 = CF
+* flags bit position 6 = ZF
+* 
+* The registers printed in terminal are in hex
+* 
+*/
+
 #define _CRT_SECURE_NO_DEPRECATE
-#define DEBUG true
 #define OS true //true if using microsoft visual studio, false if using g++
 #define MAXCODE 0x100000
 #include <iostream>
@@ -49,6 +66,7 @@ void addreg8(byte& reg8a, byte& reg8b) {
 		flags = flags | (1 << 6);
 	}
 	reg8a += reg8b;
+	if(!reg8a) flags = flags | (1 << 5);
 }
 
 void addreg16(word& reg16a, word& reg16b, byte& reg8al, byte& reg8ah, byte& reg8bl, byte& reg8bh) {
@@ -384,7 +402,6 @@ void cop(byte opcode) {
 			//add ax,di
 			addreg16(AX, DI, AL, AH, AL, AH);
 			break;
-
 		case 0xC8:
 			//add cx,ax
 			addreg16(CX, AX, CL, CH, AL, AH);
@@ -417,7 +434,6 @@ void cop(byte opcode) {
 			//add cx,di
 			addreg16(CX, DI, CL, CH, CL, CH);
 			break;
-
 		case 0xD0:
 			//add dx,ax
 			addreg16(DX, AX, DL, DH, AL, AH);
@@ -450,7 +466,6 @@ void cop(byte opcode) {
 			//add dx,di
 			addreg16(DX, DI, DL, DH, DL, DH);
 			break;
-
 		case 0xD8:
 			//add bx,ax
 			addreg16(BX, AX, BL, BH, AL, AH);
@@ -483,139 +498,144 @@ void cop(byte opcode) {
 			//add bx,di
 			addreg16(BX, DI, BL, BH, BL, BH);
 			break;
-
 		case 0xE0:
 			//add sp,ax
-			addreg16(SP, AX, (SP & 0xFF), (SP >> 8 & 0xFF), AL, AH);
+			addreg16s(SP, AX);
 			break;
 		case 0xE1:
 			//add sp,cx
-			addreg16(SP, CX, SP, SP, AL, AH);
+			addreg16s(SP, CX);
 			break;
 		case 0xE2:
 			//add sp,dx
-			addreg16(SP, DX, SP, SP, AL, AH);
+			addreg16s(SP, DX);
 			break;
 		case 0xE3:
 			//add sp,bx
-			addreg16(SP, BX, SP, SP, AL, AH);
+			addreg16s(SP, BX);
 			break;
 		case 0xE4:
 			//add sp,sp
-			addreg16(SP, SP, SP, SP, AL, AH);
+			addreg16s(SP, SP);
 			break;
 		case 0xE5:
 			//add sp,bp
-			addreg16(SP, BP, SP, SP, AL, AH);
+			addreg16s(SP, BP);
 			break;
 		case 0xE6:
 			//add sp,si
-			addreg16(SP, SI, SP, SP, AL, AH);
+			addreg16s(SP, SI);
 			break;
 		case 0xE7:
 			//add sp,di
-			//addreg16(SP, DI, SP, SP, AL, AH);
+			addreg16s(SP, DI);
 			break;
-
 		case 0xE8:
 			//add bp,ax
-			addreg16(BP, AX, BP, BP, AL, AH);
+			addreg16s(BP, AX);
 			break;
 		case 0xE9:
 			//add bp,cx
-			addreg16(BP, CX, BP, BP, CL, CH);
+			addreg16s(BP, CX);
 			break;
 		case 0xEA:
 			//add bp,dx
-			addreg16(BP, DX, BP, BP, DL, DH);
+			addreg16s(BP, DX);
 			break;
 		case 0xEB:
 			//add bp,bx
-			addreg16(BP, BX, BP, BP, BL, BH);
+			addreg16s(BP, BX);
 			break;
 		case 0xEC:
 			//add bp,sp
-			addreg16(BP, SP, BP, BP, SP, SP);
+			addreg16s(BP, SP);
 			break;
 		case 0xED:
 			//add bp,bp
-			addreg16(BP, BP, BP, BP, BP, BP);
+			addreg16s(BP, BP);
 			break;
 		case 0xEE:
 			//add bp,si
-			addreg16(BP, SI, BP, BP, SI, SI);
+			addreg16s(BP, SI);
 			break;
 		case 0xEF:
 			//add bp,di
-			addreg16(BP, DI, BP, BP, DI, DI);
+			addreg16s(BP, DI);
 			break;
-
 		case 0xF0:
 			//add si,ax
-			addreg16(SI, AX, SI, SI, AL, AH);
+			addreg16s(SI, AX);
 			break;
 		case 0xF1:
 			//add si,cx
-			addreg16(SI, CX, SI, SI, CL, CH);
+			addreg16s(SI, CX);
 			break;
 		case 0xF2:
 			//add si,dx
-			addreg16(SI, DX, SI, SI, DL, DH);
+			addreg16s(SI, DX);
 			break;
 		case 0xF3:
 			//add si,bx
-			addreg16(SI, BX, SI, SI, BL, BH);
+			addreg16s(SI, BX);
 			break;
 		case 0xF4:
 			//add si,sp
-			addreg16(SI, SP, SI, SI, SP, SP);
+			addreg16s(SI, SP);
 			break;
 		case 0xF5:
 			//add si,bp
-			addreg16(SI, BP, SI, SI, BP, BP);
+			addreg16s(SI, BP);
 			break;
 		case 0xF6:
 			//add si,si
-			addreg16(SI, SI, SI, SI, SI, SI);
+			addreg16s(SI, SI);
 			break;
 		case 0xF7:
 			//add si,di
-			addreg16(SI, DI, SI, SI, DI, DI);
+			addreg16s(SI, DI);
 			break;
-
 		case 0xF8:
 			//add di,ax
-			addreg16(DI, AX, DI, DI, AL, AH);
+			addreg16s(DI, AX);
 			break;
 		case 0xF9:
 			//add di,cx
-			addreg16(DI, CX, DI, DI, CL, CH);
+			addreg16s(DI, CX);
 			break;
 		case 0xFA:
 			//add di,dx
-			addreg16(DI, DX, DI, DI, DL, DH);
+			addreg16s(DI, DX);
 			break;
 		case 0xFB:
 			//add di,bx
-			addreg16(DI, BX, DI, DI, BL, BH);
+			addreg16s(DI, BX);
 			break;
 		case 0xFC:
 			//add di,sp
-			addreg16(DI, SP, DI, DI, SP, SP);
+			addreg16s(DI, SP);
 			break;
 		case 0xFD:
 			//add di,bp
-			addreg16(DI, BP, DI, DI, BP, BP);
+			addreg16s(DI, BP);
 			break;
 		case 0xFE:
 			//add di,si
-			addreg16(DI, SI, DI, DI, SI, SI);
+			addreg16s(DI, SI);
 			break;
 		case 0xFF:
 			//add di,di
-			addreg16(DI, DI, DI, DI, DI, DI);
+			addreg16s(DI, DI);
 			break;
 		}
+		break;
+	case 0x04:
+		//add al,imm8
+		opcode = code[IP++];
+		if (AL > 0xFF - opcode) {
+			flags = flags | (1 << 6);
+		}
+		AL += opcode;
+		if(!AL) flags = flags | (1 << 5);
 		break;
 	case 0x05:
 		//add AX,imm16
