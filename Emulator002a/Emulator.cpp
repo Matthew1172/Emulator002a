@@ -21,6 +21,7 @@ byte opcode = 0x00;
 void cop(byte opcode);
 void dumpRegisters();
 
+//0x00FF = 255
 word combine(byte low, byte hi)
 {
 	word combined = hi << 8 | low;
@@ -43,6 +44,12 @@ void printBits(size_t const size, void const* const ptr)
 	puts("");
 }
 
+void addreg8(byte reg8a, byte reg8b) {
+	if (reg8a > 0xFF - reg8b) {
+		flags = flags | (1 << 6);
+	}
+	reg8a += reg8b;
+}
 
 /*
 * 
@@ -63,6 +70,543 @@ e2
 
 void cop(byte opcode) {
 	switch (opcode) {
+	case 0x02:
+		//add reg8,reg8
+		opcode = code[IP++];
+		switch (opcode) {
+		case 0xC0:
+			//add al,al
+			if (AL > 0xFF - AL) {
+				flags = flags | (1 << 6);
+			}
+			AL += AL;
+			break;
+		case 0xC1:
+			//add al,cl
+			if (AL > 0xFF - CL) {
+				flags = flags | (1 << 6);
+			}
+			AL += CL;
+			break;
+		case 0xC2:
+			//add al,dl
+			if (AL > 0xFF - DL) {
+				flags = flags | (1 << 6);
+			}
+			AL += DL;
+			break;
+		case 0xC3:
+			//add al,bl
+			if (AL > 0xFF - BL) {
+				flags = flags | (1 << 6);
+			}
+			AL += BL;
+			break;
+		case 0xC4:
+			//add al,ah
+			if (AL > 0xFF - AH) {
+				flags = flags | (1 << 6);
+			}
+			AL += AH;
+			break;
+		case 0xC5:
+			//add al,ch
+			if (AL > 0xFF - CH) {
+				flags = flags | (1 << 6);
+			}
+			AL += CH;
+			break;
+		case 0xC6:
+			//add al,dh
+			if (AL > 0xFF - DH) {
+				flags = flags | (1 << 6);
+			}
+			AL += DH;
+			break;
+		case 0xC7:
+			//add al,bh
+			if (AL > 0xFF - BH) {
+				flags = flags | (1 << 6);
+			}
+			AL += BH;
+			break;
+		case 0xC8:
+			//add cl,al
+			if (CL > 0xFF - AL) {
+				flags = flags | (1 << 6);
+			}
+			CL += AL;
+			break;
+		case 0xC9:
+			//add cl,cl
+			if (CL > 0xFF - CL) {
+				flags = flags | (1 << 6);
+			}
+			CL += CL;
+			break;
+		case 0xCA:
+			//add cl,dl
+			if (CL > 0xFF - DL) {
+				flags = flags | (1 << 6);
+			}
+			CL += DL;
+			break;
+		case 0xCB:
+			//add cl,bl
+			if (CL > 0xFF - BL) {
+				flags = flags | (1 << 6);
+			}
+			CL += BL;
+			break;
+		case 0xCC:
+			//add cl,ah
+			if (CL > 0xFF - AH) {
+				flags = flags | (1 << 6);
+			}
+			CL += AH;
+			break;
+		case 0xCD:
+			//add cl,ch
+			if (CL > 0xFF - CH) {
+				flags = flags | (1 << 6);
+			}
+			CL += CH;
+			break;
+		case 0xCE:
+			//add cl,dh
+			if (CL > 0xFF - DH) {
+				flags = flags | (1 << 6);
+			}
+			CL += DH;
+			break;
+		case 0xCF:
+			//add cl,bh
+			if (CL > 0xFF - BH) {
+				flags = flags | (1 << 6);
+			}
+			CL += BH;
+			break;
+		case 0xD0:
+			//add dl,al
+			if (DL > 0xFF - AL) {
+				flags = flags | (1 << 6);
+			}
+			DL += AL;
+			break;
+		case 0xD1:
+			//add dl,cl
+			if (DL > 0xFF - CL) {
+				flags = flags | (1 << 6);
+			}
+			DL += CL;
+			break;
+		case 0xD2:
+			//add dl,dl
+			if (DL > 0xFF - DL) {
+				flags = flags | (1 << 6);
+			}
+			DL += DL;
+			break;
+		case 0xD3:
+			//add dl,bl
+			if (DL > 0xFF - BL) {
+				flags = flags | (1 << 6);
+			}
+			DL += BL;
+			break;
+		case 0xD4:
+			//add dl,ah
+			if (DL > 0xFF - AH) {
+				flags = flags | (1 << 6);
+			}
+			DL += AH;
+			break;
+		case 0xD5:
+			//add dl,ch
+			if (DL > 0xFF - CH) {
+				flags = flags | (1 << 6);
+			}
+			DL += CH;
+			break;
+		case 0xD6:
+			//add dl,dh
+			if (DL > 0xFF - DH) {
+				flags = flags | (1 << 6);
+			}
+			DL += DH;
+			break;
+		case 0xD7:
+			//add dl,bh
+			if (DL > 0xFF - BH) {
+				flags = flags | (1 << 6);
+			}
+			DL += BH;
+			break;
+		case 0xD8:
+			//add bl,al
+			if (BL > 0xFF - AL) {
+				flags = flags | (1 << 6);
+			}
+			BL += AL;
+			break;
+		case 0xD9:
+			//add bl,cl
+			if (BL > 0xFF - CL) {
+				flags = flags | (1 << 6);
+			}
+			BL += CL;
+			break;
+		case 0xDA:
+			//add bl,dl
+			if (BL > 0xFF - DL) {
+				flags = flags | (1 << 6);
+			}
+			BL += DL;
+			break;
+		case 0xDB:
+			//add bl,bl
+			if (BL > 0xFF - BL) {
+				flags = flags | (1 << 6);
+			}
+			BL += BL;
+			break;
+		case 0xDC:
+			//add bl,ah
+			if (BL > 0xFF - AH) {
+				flags = flags | (1 << 6);
+			}
+			BL += AH;
+			break;
+		case 0xDD:
+			//add bl,ch
+			if (BL > 0xFF - CH) {
+				flags = flags | (1 << 6);
+			}
+			BL += CH;
+			break;
+		case 0xDE:
+			//add bl,dh
+			if (BL > 0xFF - DH) {
+				flags = flags | (1 << 6);
+			}
+			BL += DH;
+			break;
+		case 0xDF:
+			//add bl,bh
+			if (BL > 0xFF - BH) {
+				flags = flags | (1 << 6);
+			}
+			BL += BH;
+			break;
+		case 0xE0:
+			//add ah,al
+			if (AH > 0xFF - AL) {
+				flags = flags | (1 << 6);
+			}
+			AH += AL;
+			break;
+		case 0xE1:
+			//add ah,cl
+			if (AH > 0xFF - CL) {
+				flags = flags | (1 << 6);
+			}
+			AH += CL;
+			break;
+		case 0xE2:
+			//add ah,dl
+			if (AH > 0xFF - DL) {
+				flags = flags | (1 << 6);
+			}
+			AH += DL;
+			break;
+		case 0xE3:
+			//add ah,bl
+			if (AH > 0xFF - BL) {
+				flags = flags | (1 << 6);
+			}
+			AH += BL;
+			break;
+		case 0xE4:
+			//add ah,ah
+			if (AH > 0xFF - AH) {
+				flags = flags | (1 << 6);
+			}
+			AH += AH;
+			break;
+		case 0xE5:
+			//add ah,ch
+			if (AH > 0xFF - CH) {
+				flags = flags | (1 << 6);
+			}
+			AH += CH;
+			break;
+		case 0xE6:
+			//add ah,dh
+			if (AH > 0xFF - DH) {
+				flags = flags | (1 << 6);
+			}
+			AH += DH;
+			break;
+		case 0xE7:
+			//add ah,bh
+			if (AH > 0xFF - BH) {
+				flags = flags | (1 << 6);
+			}
+			AH += BH;
+			break;
+		case 0xE8:
+			//add ch,al
+			if (CH > 0xFF - AL) {
+				flags = flags | (1 << 6);
+			}
+			CH += AL;
+			break;
+		case 0xE9:
+			//add ch,cl
+			if (CH > 0xFF - CL) {
+				flags = flags | (1 << 6);
+			}
+			CH += CL;
+			break;
+		case 0xEA:
+			//add ch,dl
+			if (CH > 0xFF - DL) {
+				flags = flags | (1 << 6);
+			}
+			CH += DL;
+			break;
+		case 0xEB:
+			//add ch,bl
+			if (CH > 0xFF - BL) {
+				flags = flags | (1 << 6);
+			}
+			CH += BL;
+			break;
+		case 0xEC:
+			//add ch,ah
+			if (CH > 0xFF - AH) {
+				flags = flags | (1 << 6);
+			}
+			CH += AH;
+			break;
+		case 0xED:
+			//add ch,ch
+			if (CH > 0xFF - CH) {
+				flags = flags | (1 << 6);
+			}
+			CH += CH;
+			break;
+		case 0xEE:
+			//add ch,dh
+			if (CH > 0xFF - DH) {
+				flags = flags | (1 << 6);
+			}
+			CH += DH;
+			break;
+		case 0xEF:
+			//add ch,bh
+			if (CH > 0xFF - BH) {
+				flags = flags | (1 << 6);
+			}
+			CH += BH;
+			break;
+		case 0xF0:
+			//add dh,al
+			if (DH > 0xFF - AL) {
+				flags = flags | (1 << 6);
+			}
+			DH += AL;
+			break;
+		case 0xF1:
+			//add dh,cl
+			if (DH > 0xFF - CL) {
+				flags = flags | (1 << 6);
+			}
+			DH += CL;
+			break;
+		case 0xF2:
+			//add dh,dl
+			if (DH > 0xFF - DL) {
+				flags = flags | (1 << 6);
+			}
+			DH += DL;
+			break;
+		case 0xF3:
+			//add dh,bl
+			if (DH > 0xFF - BL) {
+				flags = flags | (1 << 6);
+			}
+			DH += BL;
+			break;
+		case 0xF4:
+			//add dh,ah
+			if (DH > 0xFF - AH) {
+				flags = flags | (1 << 6);
+			}
+			DH += AH;
+			break;
+		case 0xF5:
+			//add dh,ch
+			if (DH > 0xFF - CH) {
+				flags = flags | (1 << 6);
+			}
+			DH += CH;
+			break;
+		case 0xF6:
+			//add dh,dh
+			if (DH > 0xFF - DH) {
+				flags = flags | (1 << 6);
+			}
+			DH += DH;
+			break;
+		case 0xF7:
+			//add dh,bh
+			if (DH > 0xFF - BH) {
+				flags = flags | (1 << 6);
+			}
+			DH += BH;
+			break;
+		case 0xF8:
+			//add bh,al
+			if (BH > 0xFF - AL) {
+				flags = flags | (1 << 6);
+			}
+			BH += AL;
+			break;
+		case 0xF9:
+			//add bh,cl
+			if (BH > 0xFF - CL) {
+				flags = flags | (1 << 6);
+			}
+			BH += CL;
+			break;
+		case 0xFA:
+			//add bh,dl
+			if (BH > 0xFF - DL) {
+				flags = flags | (1 << 6);
+			}
+			BH += DL;
+			break;
+		case 0xFB:
+			//add bh,bl
+			if (BH > 0xFF - BL) {
+				flags = flags | (1 << 6);
+			}
+			BH += BL;
+			break;
+		case 0xFC:
+			//add bh,ah
+			if (BH > 0xFF - AH) {
+				flags = flags | (1 << 6);
+			}
+			BH += AH;
+			break;
+		case 0xFD:
+			//add bh,ch
+			if (BH > 0xFF - CH) {
+				flags = flags | (1 << 6);
+			}
+			BH += CH;
+			break;
+		case 0xFE:
+			//add bh,dh
+			if (BH > 0xFF - DH) {
+				flags = flags | (1 << 6);
+			}
+			BH += DH;
+			break;
+		case 0xFF:
+			//add bh,bh
+			if (BH > 0xFF - BH) {
+				flags = flags | (1 << 6);
+			}
+			BH += BH;
+			break;
+		}
+
+		break;
+	case 0x05:
+		//add AX,imm16
+		opcode = code[IP++];
+		if (AX > 0xFFFF - opcode) {
+			flags = flags | (1 << 6);
+		}
+		AL += opcode;
+		opcode = code[IP++];
+		AH += opcode; 
+		AX = combine(AL, AH);
+		break;
+	case 0x81:
+		//add reg16,imm16
+		opcode = code[IP++];
+		switch (opcode) {
+		case 0xC1:
+			//add cx,imm16
+			opcode = code[IP++];
+			CL = opcode;
+			opcode = code[IP++];
+			CH = opcode;
+			if (CX > 0xFFFF - combine(CL, CH)) {
+				flags = flags | (1 << 6);
+			}
+			CX += combine(CL, CH);
+			break;
+		case 0xC2:
+			//add dx,imm16
+			opcode = code[IP++];
+			DL = opcode;
+			opcode = code[IP++];
+			DH = opcode;
+			if (DX > 0xFFFF - combine(DL, DH)) {
+				flags = flags | (1 << 6);
+			}
+			DX += combine(DL, DH);
+			break;
+		case 0xC3:
+			//add bx,imm16
+			opcode = code[IP++];
+			BL = opcode;
+			opcode = code[IP++];
+			BH = opcode;
+			if (BX > 0xFFFF - combine(BL,BH)) {
+				flags = flags | (1 << 6);
+			}
+			BX += combine(BL,BH);
+			break;
+		case 0xC4:
+			//add sp,imm16
+			opcode = code[IP++];
+			if (SP > 0xFFFF - combine(opcode, code[IP++])) {
+				flags = flags | (1 << 6);
+			}
+			SP += combine(opcode, code[IP--]);
+			break;
+		case 0xC5:
+			//add bp,imm16
+			opcode = code[IP++];
+			if (BP > 0xFFFF - combine(opcode, code[IP++])) {
+				flags = flags | (1 << 6);
+			}
+			BP += combine(opcode, code[IP--]);
+			break;
+		case 0xC6:
+			//add si,imm16
+			opcode = code[IP++];
+			if (SI > 0xFFFF - combine(opcode, code[IP++])) {
+				flags = flags | (1 << 6);
+			}
+			SI += combine(opcode, code[IP--]);
+			break;
+		case 0xC7:
+			//add di,imm16
+			opcode = code[IP++];
+			if (DI > 0xFFFF - combine(opcode, code[IP++])) {
+				flags = flags | (1 << 6);
+			}
+			DI += combine(opcode, code[IP--]);
+			break;
+		}
+		break;
 	case 0xB0:
 		//mov AL,imm8
 		opcode = code[IP++];
@@ -161,7 +705,7 @@ void cop(byte opcode) {
 int main(int argc, char* argv[]) {
 	FILE* f;
 	if (OS) {
-		f = fopen("C:\\csc210\\SAMPLE2.COM", "rb");
+		f = fopen("C:\\csc210\\SAMPLE.COM", "rb");
 		if (!f) {
 			printf("fopen could not read this file in 'rb' mode");
 			return -1;
