@@ -24,7 +24,7 @@ void dumpRegisters();
 //0x00FF = 255
 word combine(byte low, byte hi)
 {
-	word combined = hi << 8 | low;
+	word combined = (hi << 8) | low;
 	return combined;
 }
 
@@ -44,11 +44,27 @@ void printBits(size_t const size, void const* const ptr)
 	puts("");
 }
 
-void addreg8(byte reg8a, byte reg8b) {
+void addreg8(byte& reg8a, byte& reg8b) {
 	if (reg8a > 0xFF - reg8b) {
 		flags = flags | (1 << 6);
 	}
 	reg8a += reg8b;
+}
+
+void addreg16(word& reg16a, word& reg16b, byte& reg8al, byte& reg8ah, byte& reg8bl, byte& reg8bh) {
+	if (reg16a > 0xFFFF - reg16b) {
+		flags = flags | (1 << 6);
+	}
+	reg16a += reg16b;
+	reg8al = reg16a & 0xFF;
+	reg8ah = reg16a >> 8 & 0xFF;
+}
+
+void addreg16s(word& reg16a, word& reg16b) {
+	if (reg16a > 0xFFFF - reg16b) {
+		flags = flags | (1 << 6);
+	}
+	reg16a += reg16b;
 }
 
 /*
@@ -76,454 +92,530 @@ void cop(byte opcode) {
 		switch (opcode) {
 		case 0xC0:
 			//add al,al
-			if (AL > 0xFF - AL) {
-				flags = flags | (1 << 6);
-			}
-			AL += AL;
+			addreg8(AL, AL);
 			break;
 		case 0xC1:
 			//add al,cl
-			if (AL > 0xFF - CL) {
-				flags = flags | (1 << 6);
-			}
-			AL += CL;
+			addreg8(AL, CL);
 			break;
 		case 0xC2:
 			//add al,dl
-			if (AL > 0xFF - DL) {
-				flags = flags | (1 << 6);
-			}
-			AL += DL;
+			addreg8(AL, DL);
 			break;
 		case 0xC3:
 			//add al,bl
-			if (AL > 0xFF - BL) {
-				flags = flags | (1 << 6);
-			}
-			AL += BL;
+			addreg8(AL, BL);
 			break;
 		case 0xC4:
 			//add al,ah
-			if (AL > 0xFF - AH) {
-				flags = flags | (1 << 6);
-			}
-			AL += AH;
+			addreg8(AL, AH);
 			break;
 		case 0xC5:
 			//add al,ch
-			if (AL > 0xFF - CH) {
-				flags = flags | (1 << 6);
-			}
-			AL += CH;
+			addreg8(AL, CH);
 			break;
 		case 0xC6:
 			//add al,dh
-			if (AL > 0xFF - DH) {
-				flags = flags | (1 << 6);
-			}
-			AL += DH;
+			addreg8(AL, DH);
 			break;
 		case 0xC7:
 			//add al,bh
-			if (AL > 0xFF - BH) {
-				flags = flags | (1 << 6);
-			}
-			AL += BH;
+			addreg8(AL, BH);
 			break;
 		case 0xC8:
 			//add cl,al
-			if (CL > 0xFF - AL) {
-				flags = flags | (1 << 6);
-			}
-			CL += AL;
+			addreg8(CL, AL);
 			break;
 		case 0xC9:
 			//add cl,cl
-			if (CL > 0xFF - CL) {
-				flags = flags | (1 << 6);
-			}
-			CL += CL;
+			addreg8(CL, CL);
 			break;
 		case 0xCA:
 			//add cl,dl
-			if (CL > 0xFF - DL) {
-				flags = flags | (1 << 6);
-			}
-			CL += DL;
+			addreg8(CL, DL);
 			break;
 		case 0xCB:
 			//add cl,bl
-			if (CL > 0xFF - BL) {
-				flags = flags | (1 << 6);
-			}
-			CL += BL;
+			addreg8(CL, BL);
 			break;
 		case 0xCC:
 			//add cl,ah
-			if (CL > 0xFF - AH) {
-				flags = flags | (1 << 6);
-			}
-			CL += AH;
+			addreg8(CL, AH);
 			break;
 		case 0xCD:
 			//add cl,ch
-			if (CL > 0xFF - CH) {
-				flags = flags | (1 << 6);
-			}
-			CL += CH;
+			addreg8(CL, CH);
 			break;
 		case 0xCE:
 			//add cl,dh
-			if (CL > 0xFF - DH) {
-				flags = flags | (1 << 6);
-			}
-			CL += DH;
+			addreg8(CL, DH);
 			break;
 		case 0xCF:
 			//add cl,bh
-			if (CL > 0xFF - BH) {
-				flags = flags | (1 << 6);
-			}
-			CL += BH;
+			addreg8(CL, BH);
 			break;
 		case 0xD0:
 			//add dl,al
-			if (DL > 0xFF - AL) {
-				flags = flags | (1 << 6);
-			}
-			DL += AL;
+			addreg8(DL, AL);
 			break;
 		case 0xD1:
 			//add dl,cl
-			if (DL > 0xFF - CL) {
-				flags = flags | (1 << 6);
-			}
-			DL += CL;
+			addreg8(DL, CL);
 			break;
 		case 0xD2:
 			//add dl,dl
-			if (DL > 0xFF - DL) {
-				flags = flags | (1 << 6);
-			}
-			DL += DL;
+			addreg8(DL, DL);
 			break;
 		case 0xD3:
 			//add dl,bl
-			if (DL > 0xFF - BL) {
-				flags = flags | (1 << 6);
-			}
-			DL += BL;
+			addreg8(DL, BL);
 			break;
 		case 0xD4:
 			//add dl,ah
-			if (DL > 0xFF - AH) {
-				flags = flags | (1 << 6);
-			}
-			DL += AH;
+			addreg8(DL, AH);
 			break;
 		case 0xD5:
 			//add dl,ch
-			if (DL > 0xFF - CH) {
-				flags = flags | (1 << 6);
-			}
-			DL += CH;
+			addreg8(DL, CH);
 			break;
 		case 0xD6:
 			//add dl,dh
-			if (DL > 0xFF - DH) {
-				flags = flags | (1 << 6);
-			}
-			DL += DH;
+			addreg8(DL, DH);
 			break;
 		case 0xD7:
 			//add dl,bh
-			if (DL > 0xFF - BH) {
-				flags = flags | (1 << 6);
-			}
-			DL += BH;
+			addreg8(DL, BH);
 			break;
 		case 0xD8:
 			//add bl,al
-			if (BL > 0xFF - AL) {
-				flags = flags | (1 << 6);
-			}
-			BL += AL;
+			addreg8(BL, AL);
 			break;
 		case 0xD9:
 			//add bl,cl
-			if (BL > 0xFF - CL) {
-				flags = flags | (1 << 6);
-			}
-			BL += CL;
+			addreg8(BL, CL);
 			break;
 		case 0xDA:
 			//add bl,dl
-			if (BL > 0xFF - DL) {
-				flags = flags | (1 << 6);
-			}
-			BL += DL;
+			addreg8(BL, DL);
 			break;
 		case 0xDB:
 			//add bl,bl
-			if (BL > 0xFF - BL) {
-				flags = flags | (1 << 6);
-			}
-			BL += BL;
+			addreg8(BL, BL);
 			break;
 		case 0xDC:
 			//add bl,ah
-			if (BL > 0xFF - AH) {
-				flags = flags | (1 << 6);
-			}
-			BL += AH;
+			addreg8(BL, AH);
 			break;
 		case 0xDD:
 			//add bl,ch
-			if (BL > 0xFF - CH) {
-				flags = flags | (1 << 6);
-			}
-			BL += CH;
+			addreg8(BL, CH);
 			break;
 		case 0xDE:
 			//add bl,dh
-			if (BL > 0xFF - DH) {
-				flags = flags | (1 << 6);
-			}
-			BL += DH;
+			addreg8(BL, DH);
 			break;
 		case 0xDF:
 			//add bl,bh
-			if (BL > 0xFF - BH) {
-				flags = flags | (1 << 6);
-			}
-			BL += BH;
+			addreg8(BL, BH);
 			break;
 		case 0xE0:
 			//add ah,al
-			if (AH > 0xFF - AL) {
-				flags = flags | (1 << 6);
-			}
-			AH += AL;
+			addreg8(AH, AL);
 			break;
 		case 0xE1:
 			//add ah,cl
-			if (AH > 0xFF - CL) {
-				flags = flags | (1 << 6);
-			}
-			AH += CL;
+			addreg8(AH, CL);
 			break;
 		case 0xE2:
 			//add ah,dl
-			if (AH > 0xFF - DL) {
-				flags = flags | (1 << 6);
-			}
-			AH += DL;
+			addreg8(AH, DL);
 			break;
 		case 0xE3:
 			//add ah,bl
-			if (AH > 0xFF - BL) {
-				flags = flags | (1 << 6);
-			}
-			AH += BL;
+			addreg8(AH, BL);
 			break;
 		case 0xE4:
 			//add ah,ah
-			if (AH > 0xFF - AH) {
-				flags = flags | (1 << 6);
-			}
-			AH += AH;
+			addreg8(AH, AH);
 			break;
 		case 0xE5:
 			//add ah,ch
-			if (AH > 0xFF - CH) {
-				flags = flags | (1 << 6);
-			}
-			AH += CH;
+			addreg8(AH, CH);
 			break;
 		case 0xE6:
 			//add ah,dh
-			if (AH > 0xFF - DH) {
-				flags = flags | (1 << 6);
-			}
-			AH += DH;
+			addreg8(AH, CH);
 			break;
 		case 0xE7:
 			//add ah,bh
-			if (AH > 0xFF - BH) {
-				flags = flags | (1 << 6);
-			}
-			AH += BH;
+			addreg8(AH, BH);
 			break;
 		case 0xE8:
 			//add ch,al
-			if (CH > 0xFF - AL) {
-				flags = flags | (1 << 6);
-			}
-			CH += AL;
+			addreg8(CH, AL);
 			break;
 		case 0xE9:
 			//add ch,cl
-			if (CH > 0xFF - CL) {
-				flags = flags | (1 << 6);
-			}
-			CH += CL;
+			addreg8(CH, CL);
 			break;
 		case 0xEA:
 			//add ch,dl
-			if (CH > 0xFF - DL) {
-				flags = flags | (1 << 6);
-			}
-			CH += DL;
+			addreg8(CH, DL);
 			break;
 		case 0xEB:
 			//add ch,bl
-			if (CH > 0xFF - BL) {
-				flags = flags | (1 << 6);
-			}
-			CH += BL;
+			addreg8(CH, BL);
 			break;
 		case 0xEC:
 			//add ch,ah
-			if (CH > 0xFF - AH) {
-				flags = flags | (1 << 6);
-			}
-			CH += AH;
+			addreg8(CH, AH);
 			break;
 		case 0xED:
 			//add ch,ch
-			if (CH > 0xFF - CH) {
-				flags = flags | (1 << 6);
-			}
-			CH += CH;
+			addreg8(CH, CH);
 			break;
 		case 0xEE:
 			//add ch,dh
-			if (CH > 0xFF - DH) {
-				flags = flags | (1 << 6);
-			}
-			CH += DH;
+			addreg8(CH, DH);
 			break;
 		case 0xEF:
 			//add ch,bh
-			if (CH > 0xFF - BH) {
-				flags = flags | (1 << 6);
-			}
-			CH += BH;
+			addreg8(CH, BH);
 			break;
 		case 0xF0:
 			//add dh,al
-			if (DH > 0xFF - AL) {
-				flags = flags | (1 << 6);
-			}
-			DH += AL;
+			addreg8(DH, AL);
 			break;
 		case 0xF1:
 			//add dh,cl
-			if (DH > 0xFF - CL) {
-				flags = flags | (1 << 6);
-			}
-			DH += CL;
+			addreg8(DH, CL);
 			break;
 		case 0xF2:
 			//add dh,dl
-			if (DH > 0xFF - DL) {
-				flags = flags | (1 << 6);
-			}
-			DH += DL;
+			addreg8(DH, DL);
 			break;
 		case 0xF3:
 			//add dh,bl
-			if (DH > 0xFF - BL) {
-				flags = flags | (1 << 6);
-			}
-			DH += BL;
+			addreg8(DH, BL);
 			break;
 		case 0xF4:
 			//add dh,ah
-			if (DH > 0xFF - AH) {
-				flags = flags | (1 << 6);
-			}
-			DH += AH;
+			addreg8(DH, AH);
 			break;
 		case 0xF5:
 			//add dh,ch
-			if (DH > 0xFF - CH) {
-				flags = flags | (1 << 6);
-			}
-			DH += CH;
+			addreg8(DH, CH);
 			break;
 		case 0xF6:
 			//add dh,dh
-			if (DH > 0xFF - DH) {
-				flags = flags | (1 << 6);
-			}
-			DH += DH;
+			addreg8(DH, AH);
 			break;
 		case 0xF7:
 			//add dh,bh
-			if (DH > 0xFF - BH) {
-				flags = flags | (1 << 6);
-			}
-			DH += BH;
+			addreg8(DH, BH);
 			break;
 		case 0xF8:
 			//add bh,al
-			if (BH > 0xFF - AL) {
-				flags = flags | (1 << 6);
-			}
-			BH += AL;
+			addreg8(BH, AL);
 			break;
 		case 0xF9:
 			//add bh,cl
-			if (BH > 0xFF - CL) {
-				flags = flags | (1 << 6);
-			}
-			BH += CL;
+			addreg8(BH, CL);
 			break;
 		case 0xFA:
 			//add bh,dl
-			if (BH > 0xFF - DL) {
-				flags = flags | (1 << 6);
-			}
-			BH += DL;
+			addreg8(BH, DL);
 			break;
 		case 0xFB:
 			//add bh,bl
-			if (BH > 0xFF - BL) {
-				flags = flags | (1 << 6);
-			}
-			BH += BL;
+			addreg8(BH, BL);
 			break;
 		case 0xFC:
 			//add bh,ah
-			if (BH > 0xFF - AH) {
-				flags = flags | (1 << 6);
-			}
-			BH += AH;
+			addreg8(BH, AH);
 			break;
 		case 0xFD:
 			//add bh,ch
-			if (BH > 0xFF - CH) {
-				flags = flags | (1 << 6);
-			}
-			BH += CH;
+			addreg8(BH, CH);
 			break;
 		case 0xFE:
 			//add bh,dh
-			if (BH > 0xFF - DH) {
-				flags = flags | (1 << 6);
-			}
-			BH += DH;
+			addreg8(BH, DH);
 			break;
 		case 0xFF:
 			//add bh,bh
-			if (BH > 0xFF - BH) {
-				flags = flags | (1 << 6);
-			}
-			BH += BH;
+			addreg8(BH, BH);
 			break;
 		}
+		break;
+	case 0x03:
+		//add reg16,reg16
+		opcode = code[IP++];
+		switch (opcode) {
+		case 0xC0:
+			//add ax,ax
+			addreg16(AX, AX, AL, AH, AL, AH);
+			break;
+		case 0xC1:
+			//add ax,cx
+			addreg16(AX, CX, AL, AH, CL, CH);
+			break;
+		case 0xC2:
+			//add ax,dx
+			addreg16(AX, DX, AL, AH, DL, DH);
+			break;
+		case 0xC3:
+			//add ax,bx
+			addreg16(AX, BX, AL, AH, BL, BH);
+			break;
+		case 0xC4:
+			//add ax,sp
+			addreg16(AX, SP, AL, AH, AL, AH);
+			break;
+		case 0xC5:
+			//add ax,bp
+			addreg16(AX, BP, AL, AH, AL, AH);
+			break;
+		case 0xC6:
+			//add ax,si
+			addreg16(AX, SI, AL, AH, AL, AH);
+			break;
+		case 0xC7:
+			//add ax,di
+			addreg16(AX, DI, AL, AH, AL, AH);
+			break;
 
+		case 0xC8:
+			//add cx,ax
+			addreg16(CX, AX, CL, CH, AL, AH);
+			break;
+		case 0xC9:
+			//add cx,cx
+			addreg16(CX, CX, CL, CH, CL, CH);
+			break;
+		case 0xCA:
+			//add cx,dx
+			addreg16(CX, DX, CL, CH, DL, DH);
+			break;
+		case 0xCB:
+			//add cx,bx
+			addreg16(CX, BX, CL, CH, BL, BH);
+			break;
+		case 0xCC:
+			//add cx,sp
+			addreg16(CX, SP, CL, CH, CL, CH);
+			break;
+		case 0xCD:
+			//add cx,bp
+			addreg16(CX, BP, CL, CH, CL, CH);
+			break;
+		case 0xCE:
+			//add cx,si
+			addreg16(CX, SI, CL, CH, CL, CH);
+			break;
+		case 0xCF:
+			//add cx,di
+			addreg16(CX, DI, CL, CH, CL, CH);
+			break;
+
+		case 0xD0:
+			//add dx,ax
+			addreg16(DX, AX, DL, DH, AL, AH);
+			break;
+		case 0xD1:
+			//add dx,cx
+			addreg16(DX, CX, DL, DH, CL, CH);
+			break;
+		case 0xD2:
+			//add dx,dx
+			addreg16(DX, DX, DL, DH, DL, DH);
+			break;
+		case 0xD3:
+			//add dx,bx
+			addreg16(DX, BX, DL, DH, BL, BH);
+			break;
+		case 0xD4:
+			//add dx,sp
+			addreg16(DX, SP, DL, DH, DL, DH);
+			break;
+		case 0xD5:
+			//add dx,bp
+			addreg16(DX, BP, DL, DH, DL, DH);
+			break;
+		case 0xD6:
+			//add dx,si
+			addreg16(DX, SI, DL, DH, DL, DH);
+			break;
+		case 0xD7:
+			//add dx,di
+			addreg16(DX, DI, DL, DH, DL, DH);
+			break;
+
+		case 0xD8:
+			//add bx,ax
+			addreg16(BX, AX, BL, BH, AL, AH);
+			break;
+		case 0xD9:
+			//add bx,cx
+			addreg16(BX, CX, BL, BH, CL, CH);
+			break;
+		case 0xDA:
+			//add bx,dx
+			addreg16(BX, DX, BL, BH, DL, DH);
+			break;
+		case 0xDB:
+			//add bx,bx
+			addreg16(BX, BX, BL, BH, BL, BH);
+			break;
+		case 0xDC:
+			//add bx,sp
+			addreg16(BX, SP, BL, BH, BL, BH);
+			break;
+		case 0xDD:
+			//add bx,bp
+			addreg16(BX, BP, BL, BH, BL, BH);
+			break;
+		case 0xDE:
+			//add bx,si
+			addreg16(BX, SI, BL, BH, BL, BH);
+			break;
+		case 0xDF:
+			//add bx,di
+			addreg16(BX, DI, BL, BH, BL, BH);
+			break;
+
+		case 0xE0:
+			//add sp,ax
+			addreg16(SP, AX, (SP & 0xFF), (SP >> 8 & 0xFF), AL, AH);
+			break;
+		case 0xE1:
+			//add sp,cx
+			addreg16(SP, CX, SP, SP, AL, AH);
+			break;
+		case 0xE2:
+			//add sp,dx
+			addreg16(SP, DX, SP, SP, AL, AH);
+			break;
+		case 0xE3:
+			//add sp,bx
+			addreg16(SP, BX, SP, SP, AL, AH);
+			break;
+		case 0xE4:
+			//add sp,sp
+			addreg16(SP, SP, SP, SP, AL, AH);
+			break;
+		case 0xE5:
+			//add sp,bp
+			addreg16(SP, BP, SP, SP, AL, AH);
+			break;
+		case 0xE6:
+			//add sp,si
+			addreg16(SP, SI, SP, SP, AL, AH);
+			break;
+		case 0xE7:
+			//add sp,di
+			//addreg16(SP, DI, SP, SP, AL, AH);
+			break;
+
+		case 0xE8:
+			//add bp,ax
+			addreg16(BP, AX, BP, BP, AL, AH);
+			break;
+		case 0xE9:
+			//add bp,cx
+			addreg16(BP, CX, BP, BP, CL, CH);
+			break;
+		case 0xEA:
+			//add bp,dx
+			addreg16(BP, DX, BP, BP, DL, DH);
+			break;
+		case 0xEB:
+			//add bp,bx
+			addreg16(BP, BX, BP, BP, BL, BH);
+			break;
+		case 0xEC:
+			//add bp,sp
+			addreg16(BP, SP, BP, BP, SP, SP);
+			break;
+		case 0xED:
+			//add bp,bp
+			addreg16(BP, BP, BP, BP, BP, BP);
+			break;
+		case 0xEE:
+			//add bp,si
+			addreg16(BP, SI, BP, BP, SI, SI);
+			break;
+		case 0xEF:
+			//add bp,di
+			addreg16(BP, DI, BP, BP, DI, DI);
+			break;
+
+		case 0xF0:
+			//add si,ax
+			addreg16(SI, AX, SI, SI, AL, AH);
+			break;
+		case 0xF1:
+			//add si,cx
+			addreg16(SI, CX, SI, SI, CL, CH);
+			break;
+		case 0xF2:
+			//add si,dx
+			addreg16(SI, DX, SI, SI, DL, DH);
+			break;
+		case 0xF3:
+			//add si,bx
+			addreg16(SI, BX, SI, SI, BL, BH);
+			break;
+		case 0xF4:
+			//add si,sp
+			addreg16(SI, SP, SI, SI, SP, SP);
+			break;
+		case 0xF5:
+			//add si,bp
+			addreg16(SI, BP, SI, SI, BP, BP);
+			break;
+		case 0xF6:
+			//add si,si
+			addreg16(SI, SI, SI, SI, SI, SI);
+			break;
+		case 0xF7:
+			//add si,di
+			addreg16(SI, DI, SI, SI, DI, DI);
+			break;
+
+		case 0xF8:
+			//add di,ax
+			addreg16(DI, AX, DI, DI, AL, AH);
+			break;
+		case 0xF9:
+			//add di,cx
+			addreg16(DI, CX, DI, DI, CL, CH);
+			break;
+		case 0xFA:
+			//add di,dx
+			addreg16(DI, DX, DI, DI, DL, DH);
+			break;
+		case 0xFB:
+			//add di,bx
+			addreg16(DI, BX, DI, DI, BL, BH);
+			break;
+		case 0xFC:
+			//add di,sp
+			addreg16(DI, SP, DI, DI, SP, SP);
+			break;
+		case 0xFD:
+			//add di,bp
+			addreg16(DI, BP, DI, DI, BP, BP);
+			break;
+		case 0xFE:
+			//add di,si
+			addreg16(DI, SI, DI, DI, SI, SI);
+			break;
+		case 0xFF:
+			//add di,di
+			addreg16(DI, DI, DI, DI, DI, DI);
+			break;
+		}
 		break;
 	case 0x05:
 		//add AX,imm16
