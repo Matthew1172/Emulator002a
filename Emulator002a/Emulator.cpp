@@ -23,14 +23,10 @@
 
 typedef unsigned char byte;
 typedef unsigned short word;
-typedef unsigned int dword;
 
 byte AL=0x00, AH = 0x00, BL = 0x00, BH = 0x00, CL = 0x00, CH = 0x00, DL = 0x00, DH = 0x00;
 word AX = 0x0000, CX = 0x0000, DX = 0x0000, BX = 0x0000, SP = 0x0000, BP = 0x0000, SI = 0x0000, DI = 0x0000;
 word flags = 0x0000, IP = 0x0000, ES = 0x0000, SS = 0x0000, DS = 0x0000, CS = 0x0000;
-
-byte regs8[8] = { AL, AH, CL, CH, DL, DH, BL, BH };
-word regs16[8] = { AX, CX, DX, BX, SP, BP, SI, DI };
 
 byte code[MAXCODE];
 byte opcode = 0x00;
@@ -970,18 +966,7 @@ int main(int argc, char* argv[]) {
 			opcode = code[IP++];
 			printf("\nRead byte 0xCD followed by terminator byte: %02X\nexiting . . .\n", opcode);
 			if (opcode == 0x20) return 0;
-		default:		
-/*
-			printf("%hhx %zu\n", opcode, sizeof(opcode));
-			byte opcode2 = code[0];
-			word an = opcode + opcode2;
-			int bn = an*0xFFFF;
-			printf("%04X \n", an);
-			printf("%08X \n", bn);
-			//printf("%02X \t", opcode);
-*/
-
-
+		default:
 			cop(opcode);
 			break;
 		}
